@@ -1,0 +1,26 @@
+{
+  "name": "gfxtablet.js",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jzitelli/GfxTablet.js",
+  "authors": [
+    "Jeffrey Zitelli (https://github.com/jzitelli)"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jzitelli/GfxTablet.js.git"
+  },
+  "description": "JavaScript client for GfxTablet",
+  "main": "src/GfxTablet.js",
+  "keywords": [
+    "Android",
+    "GfxTablet",
+    "tablet",
+    "stylus",
+    "WebSocket",
+    "UDP"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "three.py": "git://github.com/jzitelli/three.py.git#dev"
+  }
+}
