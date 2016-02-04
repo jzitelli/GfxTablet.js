@@ -11,6 +11,15 @@
   },
   "description": "JavaScript client for GfxTablet",
   "main": "src/GfxTablet.js",
+  "files": [
+    "src/",
+    "GfxTablet.py",
+    "tornado_server.py",
+    "site_settings.py",
+    "index.html",
+    "README.md",
+    "LICENSE"
+  ],
   "keywords": [
     "Android",
     "GfxTablet",
