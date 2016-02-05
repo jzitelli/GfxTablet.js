@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
   <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no">
     <meta name="mobile-web-app-capable" content="yes">
@@ -21,19 +23,30 @@
     }
     </style>
 
-{{ json_config if json_config else "" }}
-
   </head>
+
 
   <body onload="onLoad()">
 
-    <script src="node_modules/three.js/build/three.js"></script>
+    <script src="/static/node_modules/three.js/build/three.js"></script>
 
-    <script src="node_modules/three.py/js/WebVRApplication.js"></script>
+    <script src="/static/node_modules/webvr-polyfill/build/webvr-polyfill.js"></script>
+    <script src="/static/node_modules/webvr-boilerplate/build/webvr-manager.js"></script>
 
-    <script src="src/GfxTablet.js"></script>
+    <script src="/static/node_modules/three.js/examples/js/effects/VREffect.js"></script>
+    <script src="/static/node_modules/three.js/examples/js/controls/VRControls.js"></script>
 
-    <script src="{{ url_for('static', filename='examples/editvr/app.js') }}"></script>
+    <script src="/static/node_modules/cannon/build/cannon.js"></script>
+
+    <script src="/static/node_modules/three.py/js/three.py.js"></script>
+
+    <script src="/static/node_modules/three.py/js/WebVRApplication.js"></script>
+
+    <script src="/static/src/GfxTablet.js"></script>
+
+    <script src="/static/index.js"></script>
 
   </body>
+
+
 </html>

@@ -1,10 +1,6 @@
 /* global pyserver */
 function addGfxTablet(width, height, logger) {
     "use strict";
-    if (pyserver.config.WEBSOCKETS.indexOf('/gfxtablet') == -1) {
-        pyserver.log('configure pyserver to open gfxtablet websocket at /gfxtablet');
-        return;
-    }
     width = width || 2560 / 2;
     height = height || 1600 / 2;
 
@@ -31,7 +27,6 @@ function addGfxTablet(width, height, logger) {
     cursorMaterial.transparent = true;
     cursorMaterial.opacity = 0.666;
     var cursor = new THREE.Mesh(new THREE.CircleGeometry(0.02), cursorMaterial);
-    canvasMesh.add(cursor);
     cursor.position.z = 0.01;
     cursor.visible = false;
 
@@ -110,6 +105,3 @@ function addGfxTablet(width, height, logger) {
     return {paintableMaterial: paintableMaterial,
             cursor: cursor};
 }
-
-// var canvasMesh = new THREE.Mesh(new THREE.PlaneBufferGeometry(scale * aspect, scale), paintableMaterial);
-// canvasMesh.position.z = -4;
