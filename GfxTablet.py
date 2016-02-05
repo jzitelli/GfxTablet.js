@@ -14,8 +14,8 @@ _logger = logging.getLogger(__name__)
 
 
 class GfxTabletHandler(WebSocketHandler):
-    TYPE_MOTION = 0
-    TYPE_BUTTON = 1
+    EVENT_TYPE_MOTION = 0
+    EVENT_TYPE_BUTTON = 1
     udpsock = socket.socket(type=socket.SOCK_DGRAM)
     udpsock.bind(('0.0.0.0', 40118))
     udpsock.setblocking(False)
@@ -40,16 +40,13 @@ class GfxTabletHandler(WebSocketHandler):
         buf = self._buf
         nbytes = self.udpsock.recv_into(buf)
         event_type = buf[11]
-        x = (256 * buf[12] + buf[12 + 1]) / 2.0**15
-        y = (256 * buf[14] + buf[14 + 1]) / 2.0**15
-        p = (256 * buf[16] + buf[16 + 1]) / 2.0**15
-        if event_type == GfxTabletHandler.TYPE_MOTION:
+        x = (256 * buf[12] + buf[12 + 1]) / 2.0**16
+        y = (256 * buf[14] + buf[14 + 1]) / 2.0**16
+        p = (256 * buf[16] + buf[16 + 1]) / 2.0**16
+        if event_type == GfxTabletHandler.EVENT_TYPE_MOTION:
             self.write_message({'x': x, 'y': y, 'p': p})
-        elif event_type == GfxTabletHandler.TYPE_BUTTON:
-            button = buf[18]
-            button_down = buf[19]
-            self.write_message({'x': x, 'y': y, 'p': p,
-                'button': button, 'button_down': button_down})
+        elif event_type == GfxTabletHandler.EVENT_TYPE_BUTTON:
+            self.write_message({'x': x, 'y': y, 'p': p, 'button': buf[18], 'down': buf[19]})
 
 
 if __name__ == "__main__":

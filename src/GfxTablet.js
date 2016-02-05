@@ -1,4 +1,3 @@
-/* global pyserver */
 function addGfxTablet(width, height, logger) {
     "use strict";
     width = width || 2560 / 2;
@@ -6,11 +5,11 @@ function addGfxTablet(width, height, logger) {
 
     var socket = new WebSocket('ws://' + document.domain + ':' + location.port + '/gfxtablet');
 
-    var gfxtabletCanvas = document.createElement('canvas');
-    gfxtabletCanvas.width = width;
-    gfxtabletCanvas.height = height;
-    var aspect = gfxtabletCanvas.width / gfxtabletCanvas.height;
-    var texture = new THREE.Texture(gfxtabletCanvas, THREE.UVMapping, THREE.ClampToEdgeWrapping, THREE.ClampToEdgeWrapping,
+    var canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    var aspect = canvas.width / canvas.height;
+    var texture = new THREE.Texture(canvas, THREE.UVMapping, THREE.ClampToEdgeWrapping, THREE.ClampToEdgeWrapping,
                                     THREE.LinearFilter, THREE.LinearFilter);
 
     var paintableMaterial = new THREE.MeshBasicMaterial({color: 0xffffff, map: texture});
@@ -18,7 +17,7 @@ function addGfxTablet(width, height, logger) {
     var image = paintableMaterial.map.image;
     var ctx = image.getContext('2d');
     ctx.fillStyle = 'rgb(255, 255, 255)';
-    ctx.fillRect(0, 0, gfxtabletCanvas.width, gfxtabletCanvas.height);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     var scale = 2;
     paintableMaterial.map.needsUpdate = true;
@@ -41,10 +40,10 @@ function addGfxTablet(width, height, logger) {
         ctx.beginPath();
         ctx.strokeStyle = 'rgba(0,255,50,0.92)'; //stroke.color;
         ctx.lineWidth = start.p * 10; //normalizeLineSize(stroke.size);
-        ctx.moveTo(gfxtabletCanvas.width * start.x, gfxtabletCanvas.height * start.y);
+        ctx.moveTo(canvas.width * start.x, canvas.height * start.y);
         for (var j = 1; j < points.length; j++) {
             var end = points[j];
-            ctx.lineTo(gfxtabletCanvas.width * end.x, gfxtabletCanvas.height * end.y);
+            ctx.lineTo(canvas.width * end.x, canvas.height * end.y);
         }
         ctx.stroke();
     }
@@ -63,7 +62,7 @@ function addGfxTablet(width, height, logger) {
     }
 
     socket.onopen = function () {
-        logger.log("GfxTable WebSocket opened");
+        logger.log("GfxTablet WebSocket opened");
     };
     socket.onerror = function (error) {
         logger.log("could not connect to GfxTablet WebSocket");
@@ -73,9 +72,40 @@ function addGfxTablet(width, height, logger) {
     var NP = 2;
     socket.onmessage = function (message) {
         var data = JSON.parse(message.data);
+        if (data.button !== undefined) {
+            // button event
+            if (data.button === 255) { // how to interpret as signed, i.e. -1?
+                if (data.down === 1) {
+                    // stylus is in range
+                    cursor.visible = true;
+                } else {
+                    // stylus is out of range
+                    cursor.visible = false;
+                }
+            } else if (data.button === 0) {
+                if (data.down === 0) {
+                    // stylus lifted
+                    drawStroke(points);
+                    paintableMaterial.map.needsUpdate = true;
+                    points = [];
+                    stroking = false;
+                    cursor.visible = true;
+                } else {
+                    // stylus down
+                    stroking = true;
+                    cursor.visible = false;
+                }
+            } else {
+                if (data.down === 0) {
+                    logger.log('button ' + data.button + ' released');
+                } else {
+                    logger.log('button ' + data.button + ' pressed');
+                }
+            }
+        }
         if (data.p > 0) {
             points.push(data);
-            // circle(gfxtabletCanvas.width * data.x, gfxtabletCanvas.height * data.y,
+            // circle(canvas.width * data.x, canvas.height * data.y,
             //     2 + 50*data.p * data.p, '255,0,0', 0.1 + 0.9 * data.p);
             if (points.length > NP) {
                 drawStroke(points);
@@ -83,20 +113,7 @@ function addGfxTablet(width, height, logger) {
                 points.splice(0, NP);
             }
         }
-        if (data.button !== undefined) {
-            if (data.button_down === 0) {
-                drawStroke(points);
-                stroking = false;
-                paintableMaterial.map.needsUpdate = true;
-                points = [];
-            } else {
-                stroking = true;
-            }
-        }
-        if (stroking) {
-            cursor.visible = false;
-        } else {
-            cursor.visible = true;
+        if (cursor.visible) {
             cursor.position.x = -aspect * scale / 2 + aspect * scale * data.x;
             cursor.position.y = scale / 2 - scale * data.y;
         }
