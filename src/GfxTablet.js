@@ -68,10 +68,19 @@ function addGfxTablet(width, height, logger) {
         logger.log("could not connect to GfxTablet WebSocket");
     };
     var points = [];
-    var stroking = false;
-    var NP = 2;
+    var NP = 3;
     socket.onmessage = function (message) {
         var data = JSON.parse(message.data);
+        if (data.p > 0) {
+            points.push(data);
+            // circle(canvas.width * data.x, canvas.height * data.y,
+            //     2 + 50*data.p * data.p, '255,0,0', 0.1 + 0.9 * data.p);
+            if (points.length > NP) {
+                drawStroke(points);
+                paintableMaterial.map.needsUpdate = true;
+                points.splice(0, NP);
+            }
+        }
         if (data.button !== undefined) {
             // button event
             if (data.button === 255) { // how to interpret as signed, i.e. -1?
@@ -88,30 +97,19 @@ function addGfxTablet(width, height, logger) {
                     drawStroke(points);
                     paintableMaterial.map.needsUpdate = true;
                     points = [];
-                    stroking = false;
                     cursor.visible = true;
                 } else {
                     // stylus down
-                    stroking = true;
                     cursor.visible = false;
                 }
-            } else {
-                if (data.down === 0) {
-                    logger.log('button ' + data.button + ' released');
-                } else {
-                    logger.log('button ' + data.button + ' pressed');
-                }
             }
-        }
-        if (data.p > 0) {
-            points.push(data);
-            // circle(canvas.width * data.x, canvas.height * data.y,
-            //     2 + 50*data.p * data.p, '255,0,0', 0.1 + 0.9 * data.p);
-            if (points.length > NP) {
-                drawStroke(points);
-                paintableMaterial.map.needsUpdate = true;
-                points.splice(0, NP);
-            }
+            // else {
+            //     if (data.down === 0) {
+            //         logger.log('button ' + data.button + ' released');
+            //     } else {
+            //         logger.log('button ' + data.button + ' pressed');
+            //     }
+            // }
         }
         if (cursor.visible) {
             cursor.position.x = -aspect * scale / 2 + aspect * scale * data.x;

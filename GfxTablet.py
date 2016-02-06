@@ -42,10 +42,13 @@ class GfxTabletHandler(WebSocketHandler):
         event_type = buf[11]
         x = (256 * buf[12] + buf[12 + 1]) / 2.0**16
         y = (256 * buf[14] + buf[14 + 1]) / 2.0**16
-        p = (256 * buf[16] + buf[16 + 1]) / 2.0**16
+        p = (256 * buf[16] + buf[16 + 1]) / 2.0**15
         if event_type == GfxTabletHandler.EVENT_TYPE_MOTION:
             self.write_message({'x': x, 'y': y, 'p': p})
         elif event_type == GfxTabletHandler.EVENT_TYPE_BUTTON:
+            # TODO: galaxy note 10.1 stylus button not working?
+            # if buf[18] != 255:
+            #     _logger.debug("button: %d  down: %d" % (buf[18], buf[19]))
             self.write_message({'x': x, 'y': y, 'p': p, 'button': buf[18], 'down': buf[19]})
 
 
