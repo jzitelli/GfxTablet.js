@@ -5,7 +5,7 @@ function onLoad() {
 	var scene = new THREE.Scene();
 	var avatar = new THREE.Object3D();
 
-	var app = new WebVRApplication(scene, {useWebVRBoilerplate: true});
+	var app = new WebVRApp(scene, undefined, {canvas: document.getElementById('webgl-canvas')});
 
 	var camera = app.camera;
 
@@ -26,16 +26,16 @@ function onLoad() {
 
 	scene.add(canvasMesh);
 
-	app.start( ( function () {
+	var start = function () {
 		var lt = 0;
 		function animate(t) {
-			var dt = t - lt;
-
-			app.vrControls.update(dt);
-			app.vrManager.render(scene, camera);
-
+			var dt = 0.001 * (t - lt);
+			app.render();
 			requestAnimationFrame(animate);
 		}
-		return animate;
-	} )() );
+		animate();
+	};
+
+	start();
+
 }
