@@ -31,7 +31,6 @@
   "license": "MIT",
   "dependencies": {
     "yawvrb": "git://github.com/jzitelli/yawvrb.js.git",
-    "three": "git://github.com/jzitelli/three.js.git#dev",
-    "three.py": "git://github.com/jzitelli/three.py.git#dev"
+    "three": "git://github.com/jzitelli/three.js.git#dev"
   }
 }

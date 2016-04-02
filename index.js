@@ -1,18 +1,17 @@
 function onLoad() {
 	"use strict";
-	console.log('loaded');
-
 	var scene = new THREE.Scene();
 	var avatar = new THREE.Object3D();
 
-	var app = new WebVRApp(scene, undefined, {canvas: document.getElementById('webgl-canvas')});
+	scene.add(avatar);
+
+	var app = new WebVRApp(scene, undefined, undefined);
 
 	var camera = app.camera;
 
 	avatar.add(camera);
-	scene.add(avatar);
 	
-	var stuff = addGfxTablet(2560/2, 1600/2, console);
+	var stuff = addGfxTablet(2560/2, 1600/2);
 
 	var paintableMaterial = stuff.paintableMaterial;
 	var cursor = stuff.cursor;
@@ -37,5 +36,4 @@ function onLoad() {
 	};
 
 	start();
-
 }

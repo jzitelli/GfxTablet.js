@@ -1,4 +1,4 @@
-function addGfxTablet(width, height, logger) {
+function addGfxTablet(width, height) {
     "use strict";
     width = width || 2560 / 2;
     height = height || 1600 / 2;
@@ -62,10 +62,10 @@ function addGfxTablet(width, height, logger) {
     }
 
     socket.onopen = function () {
-        logger.log("GfxTablet WebSocket opened");
+        console.log("GfxTablet WebSocket opened");
     };
     socket.onerror = function (error) {
-        logger.log("could not connect to GfxTablet WebSocket");
+        console.log("could not connect to GfxTablet WebSocket");
     };
     var points = [];
     var NP = 3;
@@ -105,9 +105,9 @@ function addGfxTablet(width, height, logger) {
             }
             // else {
             //     if (data.down === 0) {
-            //         logger.log('button ' + data.button + ' released');
+            //         console.log('button ' + data.button + ' released');
             //     } else {
-            //         logger.log('button ' + data.button + ' pressed');
+            //         console.log('button ' + data.button + ' pressed');
             //     }
             // }
         }
