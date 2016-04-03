@@ -1,7 +1,12 @@
 function addGfxTablet(width, height) {
     "use strict";
-    width = width || 2560 / 2;
-    height = height || 1600 / 2;
+    const DEFAULT_WIDTH = 2560;
+    const DEFAULT_HEIGHT = 1600;
+
+    var scale = 2;
+
+    width = (width || DEFAULT_WIDTH) / scale;
+    height = (height || DEFAULT_HEIGHT) / scale;
 
     var socket = new WebSocket('ws://' + document.domain + ':' + location.port + '/gfxtablet');
 
@@ -9,6 +14,7 @@ function addGfxTablet(width, height) {
     canvas.width = width;
     canvas.height = height;
     var aspect = canvas.width / canvas.height;
+
     var texture = new THREE.Texture(canvas, THREE.UVMapping, THREE.ClampToEdgeWrapping, THREE.ClampToEdgeWrapping,
                                     THREE.LinearFilter, THREE.LinearFilter);
 
@@ -19,7 +25,6 @@ function addGfxTablet(width, height) {
     ctx.fillStyle = 'rgb(255, 255, 255)';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    var scale = 2;
     paintableMaterial.map.needsUpdate = true;
 
     var cursorMaterial = new THREE.MeshBasicMaterial({color: 0xee9966});
@@ -68,7 +73,7 @@ function addGfxTablet(width, height) {
         console.log("could not connect to GfxTablet WebSocket");
     };
     var points = [];
-    var NP = 3;
+    const NP = 3;
     socket.onmessage = function (message) {
         var data = JSON.parse(message.data);
         if (data.p > 0) {

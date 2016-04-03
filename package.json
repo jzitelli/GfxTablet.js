@@ -29,8 +29,8 @@
     "UDP"
   ],
   "license": "MIT",
-  "dependencies": {
-    "yawvrb": "git://github.com/jzitelli/yawvrb.js.git",
-    "three": "git://github.com/jzitelli/three.js.git#dev"
+  "devDependencies": {
+    "three": "git://github.com/jzitelli/three.js.git#dev",
+    "yawvrb": "git://github.com/jzitelli/yawvrb.js.git"
   }
 }
