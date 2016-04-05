@@ -49,9 +49,10 @@ var GFXTABLET = ( function () {
             var cursorMaterial = new THREE.MeshBasicMaterial({color: 0xee9966});
             cursorMaterial.transparent = true;
             cursorMaterial.opacity = 0.666;
+
             var cursor = new THREE.Mesh(new THREE.CircleGeometry(1), cursorMaterial);
-            cursor.position.z = 0.001;
             cursor.visible = false;
+            cursor.matrixAutoUpdate = false;
 
             var points = [];
 
@@ -110,6 +111,7 @@ var GFXTABLET = ( function () {
                 if (cursor.visible) {
                     cursor.position.x = -0.5 + data.x;
                     cursor.position.y =  0.5 - data.y;
+                    cursor.updateMatrix();
                 }
             };
 

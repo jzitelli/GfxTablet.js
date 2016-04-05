@@ -32,6 +32,8 @@ function onLoad() {
 	var cursorSize = 0.02;
 	cursor.scale.x = cursorSize / (meshScale * aspect);
 	cursor.scale.y = cursorSize / meshScale;
+	cursor.position.z = 0.01;
+	cursor.updateMatrix();
 
 	mesh.position.z = -2;
 
