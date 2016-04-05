@@ -6,7 +6,10 @@ from operator import itemgetter
 from tornado.web import Application, RequestHandler, StaticFileHandler
 from tornado.ioloop import IOLoop
 
-from site_settings import config
+config = {
+    'DEBUG': True,
+    'PORT' : 5000
+}
 
 from GfxTablet import GfxTabletHandler
 

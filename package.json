@@ -15,7 +15,6 @@
     "src/",
     "GfxTablet.py",
     "tornado_server.py",
-    "site_settings.py",
     "index.html",
     "README.md",
     "LICENSE"
@@ -32,5 +31,8 @@
   "devDependencies": {
     "three": "git://github.com/jzitelli/three.js.git#dev",
     "yawvrb": "git://github.com/jzitelli/yawvrb.js.git"
+  },
+  "scripts": {
+    "start": "python tornado_server.py"
   }
 }
